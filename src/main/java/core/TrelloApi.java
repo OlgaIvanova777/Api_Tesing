@@ -1,6 +1,8 @@
 package core;
 
 import beans.Boards;
+import beans.Cards;
+import beans.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.restassured.RestAssured;
@@ -20,7 +22,7 @@ import static core.TrelloConstants.*;
 import static org.hamcrest.Matchers.lessThan;
 
 public class TrelloApi {
-    private static String URL = String.format(TRELLO_API_URI, TRELLO_API_KEY, TRELLO_API_TOKEN);
+    private static String URL = String.format(TRELLO_USER_API_URI, TRELLO_API_KEY, TRELLO_API_TOKEN);
 
     //builder pattern
     private TrelloApi() {
@@ -54,6 +56,22 @@ public class TrelloApi {
             return this;
         }*/
 
+
+        public ApiBuilder board(String options) {
+            trelloApi.params.put(NAME_PARAM, options);
+            return this;
+        }
+
+        public ApiBuilder card(String options) {
+            trelloApi.params.put(NAME_PARAM, options);
+            return this;
+        }
+
+        public ApiBuilder lists(String options) {
+            trelloApi.params.put(NAME_PARAM, options);
+            return this;
+        }
+
         public Response callApi() {
             return RestAssured.with()
                     .queryParams(trelloApi.params)
@@ -66,7 +84,14 @@ public class TrelloApi {
     public static List<Boards> getTrelloBoardsAnswers(Response response){
         return new Gson().fromJson( response.asString().trim(), new TypeToken<List<Boards>>() {}.getType());
     }
-
+    //get ready Boards answers list form api response
+    public static List<Lists> getTrelloListAnswers(Response response){
+        return new Gson().fromJson( response.asString().trim(), new TypeToken<List<Lists>>() {}.getType());
+    }
+    //get ready Boards answers list form api response
+    public static List<Cards> getTrelloCardsAnswers(Response response){
+        return new Gson().fromJson( response.asString().trim(), new TypeToken<List<Cards>>() {}.getType());
+    }
 
     //set base request and response specifications tu use in tests
     public static ResponseSpecification successResponse(){
@@ -87,6 +112,8 @@ public class TrelloApi {
                 .setBaseUri(URL)
                 .build();
     }
+
+
     public static void main(String[] args) {
         System.out.println();
     }
