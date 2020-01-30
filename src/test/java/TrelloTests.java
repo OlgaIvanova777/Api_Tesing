@@ -35,7 +35,7 @@ public class TrelloTests {
                 .accept(ContentType.JSON)
                 .header("x-trello-version", "1.1963.0")
                 .and()
-                //.body("some body payroll")
+                .body("backgroundImageScaled")
                 .log().everything()
                 .when()
                 .get(TRELLO_NEW_BOARD_API_URL + ID)
