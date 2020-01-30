@@ -39,7 +39,7 @@ public class TrelloApi {
             trelloApi = gcApi;
         }
 
-/*        public ApiBuilder text(String text) {
+        public ApiBuilder text(String text) {
             trelloApi.params.put(PARAM_TEXT, text);
             return this;
         }
@@ -52,89 +52,7 @@ public class TrelloApi {
         public ApiBuilder language(Languages language) {
             trelloApi.params.put(PARAM_LANG, language.languageCode);
             return this;
-        }*/
-
-        /*       public static final String TRELLO_CREATE_NEW_BOARD =
-                "https://api.trello.com/1/boards/?name=%s&defaultLabels=true&defaultLists=true&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=blue&prefs_cardAging=regular&key=%s&token=%s";
-        public static final String TRELLO_GET_BOARDS = "curl https://api.trello.com/1/members/me/boards?fields=name,url&key=%s&token=%s";
-
-        public static final String TRELLO_GET_LISTS = "https://api.trello.com/1/boards/%s/lists?cards=none&card_fields=all&filter=open&fields=all&key=%s&token=%s";
-
-        public static final String TRELLO_CREATE_NEW_CARD = "https://api.trello.com/1/cards?name=%s&desc=%s&idList=idList&keepFromSource=all&key=%s&token=%s";
-
-        public static final String TRELLO_GET_CARD = "https://api.trello.com/1/cards/%s?attachments=false&attachment_fields=all&members=false&membersVoted=false&checkItemStates=false&checklists=none&checklist_fields=all&board=false&list=false&pluginData=false&stickers=false&sticker_fields=all&customFieldItems=false&key=%s&token=%s";
-*/
-        /*       public static final String TRELLO_CREATE_NEW_BOARD =
-                        "https://api.trello.com/1/boards/?name=%s&defaultLabels=true&defaultLists=true&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=blue&prefs_cardAging=regular&key=%s&token=%s";
-                public static final String TRELLO_GET_BOARDS = "curl https://api.trello.com/1/members/me/boards?fields=name,url&key=%s&token=%s";
-
-                public static final String TRELLO_GET_LISTS = "https://api.trello.com/1/boards/%s/lists?cards=none&card_fields=all&filter=open&fields=all&key=%s&token=%s";
-
-                public static final String TRELLO_CREATE_NEW_CARD = "https://api.trello.com/1/cards?name=%s&desc=%s&idList=idList&keepFromSource=all&key=%s&token=%s";
-
-                public static final String TRELLO_GET_CARD = "https://api.trello.com/1/cards/%s?attachments=false&attachment_fields=all&members=false&membersVoted=false&checkItemStates=false&checklists=none&checklist_fields=all&board=false&list=false&pluginData=false&stickers=false&sticker_fields=all&customFieldItems=false&key=%s&token=%s";
-
-        /*       public static final String TRELLO_CREATE_NEW_BOARD =
-                        "https://api.trello.com/1/boards/?name=%s&defaultLabels=true&defaultLists=true&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=blue&prefs_cardAging=regular&key=%s&token=%s";
-                public static final String TRELLO_GET_BOARDS = "curl https://api.trello.com/1/members/me/boards?fields=name,url&key=%s&token=%s";
-
-                public static final String TRELLO_GET_LISTS = "https://api.trello.com/1/boards/%s/lists?cards=none&card_fields=all&filter=open&fields=all&key=%s&token=%s";
-
-                public static final String TRELLO_CREATE_NEW_CARD = "https://api.trello.com/1/cards?name=%s&desc=%s&idList=idList&keepFromSource=all&key=%s&token=%s";
-
-                public static final String TRELLO_GET_CARD = "https://api.trello.com/1/cards/%s?attachments=false&attachment_fields=all&members=false&membersVoted=false&checkItemStates=false&checklists=none&checklist_fields=all&board=false&list=false&pluginData=false&stickers=false&sticker_fields=all&customFieldItems=false&key=%s&token=%s";
-        */
-        /*       public static final String TRELLO_CREATE_NEW_BOARD =
-                        "https://api.trello.com/1/boards/?name=%s&defaultLabels=true&defaultLists=true&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=blue&prefs_cardAging=regular&key=%s&token=%s";
-                public static final String TRELLO_GET_BOARDS = "curl https://api.trello.com/1/members/me/boards?fields=name,url&key=%s&token=%s";
-
-                public static final String TRELLO_GET_LISTS = "https://api.trello.com/1/boards/%s/lists?cards=none&card_fields=all&filter=open&fields=all&key=%s&token=%s";
-
-                public static final String TRELLO_CREATE_NEW_CARD = "https://api.trello.com/1/cards?name=%s&desc=%s&idList=idList&keepFromSource=all&key=%s&token=%s";
-
-                public static final String TRELLO_GET_CARD = "https://api.trello.com/1/cards/%s?attachments=false&attachment_fields=all&members=false&membersVoted=false&checkItemStates=false&checklists=none&checklist_fields=all&board=false&list=false&pluginData=false&stickers=false&sticker_fields=all&customFieldItems=false&key=%s&token=%s";
-        */
-
-        /*       public static final String TRELLO_CREATE_NEW_BOARD =
-                        "https://api.trello.com/1/boards/?name=%s&defaultLabels=true&defaultLists=true&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=blue&prefs_cardAging=regular&key=%s&token=%s";
-                public static final String TRELLO_GET_BOARDS = "curl https://api.trello.com/1/members/me/boards?fields=name,url&key=%s&token=%s";
-
-                public static final String TRELLO_GET_LISTS = "https://api.trello.com/1/boards/%s/lists?cards=none&card_fields=all&filter=open&fields=all&key=%s&token=%s";
-
-                public static final String TRELLO_CREATE_NEW_CARD = "https://api.trello.com/1/cards?name=%s&desc=%s&idList=idList&keepFromSource=all&key=%s&token=%s";
-
-                public static final String TRELLO_GET_CARD = "https://api.trello.com/1/cards/%s?attachments=false&attachment_fields=all&members=false&membersVoted=false&checkItemStates=false&checklists=none&checklist_fields=all&board=false&list=false&pluginData=false&stickers=false&sticker_fields=all&customFieldItems=false&key=%s&token=%s";
-        */
-        /*       public static final String TRELLO_CREATE_NEW_BOARD =
-                        "https://api.trello.com/1/boards/?name=%s&defaultLabels=true&defaultLists=true&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=blue&prefs_cardAging=regular&key=%s&token=%s";
-                public static final String TRELLO_GET_BOARDS = "curl https://api.trello.com/1/members/me/boards?fields=name,url&key=%s&token=%s";
-
-                public static final String TRELLO_GET_LISTS = "https://api.trello.com/1/boards/%s/lists?cards=none&card_fields=all&filter=open&fields=all&key=%s&token=%s";
-
-                public static final String TRELLO_CREATE_NEW_CARD = "https://api.trello.com/1/cards?name=%s&desc=%s&idList=idList&keepFromSource=all&key=%s&token=%s";
-
-                public static final String TRELLO_GET_CARD = "https://api.trello.com/1/cards/%s?attachments=false&attachment_fields=all&members=false&membersVoted=false&checkItemStates=false&checklists=none&checklist_fields=all&board=false&list=false&pluginData=false&stickers=false&sticker_fields=all&customFieldItems=false&key=%s&token=%s";
-
-        /*       public static final String TRELLO_CREATE_NEW_BOARD =
-                        "https://api.trello.com/1/boards/?name=%s&defaultLabels=true&defaultLists=true&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=blue&prefs_cardAging=regular&key=%s&token=%s";
-                public static final String TRELLO_GET_BOARDS = "curl https://api.trello.com/1/members/me/boards?fields=name,url&key=%s&token=%s";
-
-                public static final String TRELLO_GET_LISTS = "https://api.trello.com/1/boards/%s/lists?cards=none&card_fields=all&filter=open&fields=all&key=%s&token=%s";
-
-                public static final String TRELLO_CREATE_NEW_CARD = "https://api.trello.com/1/cards?name=%s&desc=%s&idList=idList&keepFromSource=all&key=%s&token=%s";
-
-                public static final String TRELLO_GET_CARD = "https://api.trello.com/1/cards/%s?attachments=false&attachment_fields=all&members=false&membersVoted=false&checkItemStates=false&checklists=none&checklist_fields=all&board=false&list=false&pluginData=false&stickers=false&sticker_fields=all&customFieldItems=false&key=%s&token=%s";
-        */
-        /*       public static final String TRELLO_CREATE_NEW_BOARD =
-                        "https://api.trello.com/1/boards/?name=%s&defaultLabels=true&defaultLists=true&keepFromSource=none&prefs_permissionLevel=private&prefs_voting=disabled&prefs_comments=members&prefs_invitations=members&prefs_selfJoin=true&prefs_cardCovers=true&prefs_background=blue&prefs_cardAging=regular&key=%s&token=%s";
-                public static final String TRELLO_GET_BOARDS = "curl https://api.trello.com/1/members/me/boards?fields=name,url&key=%s&token=%s";
-
-                public static final String TRELLO_GET_LISTS = "https://api.trello.com/1/boards/%s/lists?cards=none&card_fields=all&filter=open&fields=all&key=%s&token=%s";
-
-                public static final String TRELLO_CREATE_NEW_CARD = "https://api.trello.com/1/cards?name=%s&desc=%s&idList=idList&keepFromSource=all&key=%s&token=%s";
-
-                public static final String TRELLO_GET_CARD = "https://api.trello.com/1/cards/%s?attachments=false&attachment_fields=all&members=false&membersVoted=false&checkItemStates=false&checklists=none&checklist_fields=all&board=false&list=false&pluginData=false&stickers=false&sticker_fields=all&customFieldItems=false&key=%s&token=%s";
-        */
+        }
 
 
 
@@ -143,35 +61,20 @@ public class TrelloApi {
         public ApiBuilder new_board(String name /*,String defaultLabels, String defaultLists,
                                     String keepFromSource, String prefs_permissionLevel, String prefs_voting,
                                     String prefs_comments, String prefs_invitations, String prefs_selfJoin,
-                                    String prefs_cardCovers, String prefs_background, String prefs_cardAging,
-                                    String key, String token*/) {
+                                    String prefs_cardCovers, String prefs_background, String prefs_cardAging*/,
+                                    String key, String token) {
             trelloApi.params.put(NAME_PARAM, name);
-          /*  trelloApi.params.put(DEFAULT_LABELS_PARAM, defaultLabels);
-            trelloApi.params.put(DEFAULT_LISTS_PARAM, defaultLists);
-          *//*  trelloApi.params.put(DESC_PARAM, desc);
-            trelloApi.params.put(ID_ORGANIZATION_PARAM, idOrganization);
-            trelloApi.params.put(ID_BOARD_SOURCE_PARAM, idBoardSource);*//*
-            trelloApi.params.put(KEEP_FROM_SOURCE_PARAM, keepFromSource);
-//            trelloApi.params.put(POWER_UPS_PARAM, powerUps);
-            trelloApi.params.put(PREFS_PERMISSION_LEVEL_PARAM, prefs_permissionLevel);
-            trelloApi.params.put(PREFS_VOTING_PARAM, prefs_voting);
-            trelloApi.params.put(PREFS_COMMENTS_PARAM, prefs_comments);
-            trelloApi.params.put(PREFS_INVITATIONS_PARAM, prefs_invitations);
-            trelloApi.params.put(PREFS_SELF_JOIN_PARAM, prefs_selfJoin);
-            trelloApi.params.put(PREFS_CARD_COVERS_PARAM, prefs_cardCovers);
-            trelloApi.params.put(PREFS_BACKGROUND_PARAM, prefs_background);
-            trelloApi.params.put(PREFS_CARD_AGING_PARAM, prefs_cardAging);
             trelloApi.params.put(KEY_PARAM, key);
-            trelloApi.params.put(TOKEN_PARAM, token);*/
+            trelloApi.params.put(TOKEN_PARAM, token);
             return this;
         }
- /*       public ApiBuilder new_board(String name) {
-            return new_board(name*//*, "true", "true",
+      public ApiBuilder new_board(String name) {
+            return new_board(name /*, "true", "true",
                     "none", "private", "disabled",
                     "members", "members", "true",
-                    "true","blue" , "regular",
-                    TRELLO_API_KEY_VALUE, TRELLO_API_TOKEN_VALUE*//*);
-        }*/
+                    "true","blue" , "regular"*/,
+                    TRELLO_API_KEY_VALUE, TRELLO_API_TOKEN_VALUE);
+        }
 
         //TRELLO_NEW_BOARD_API_URL
         public ApiBuilder board(String actions, String boardStars, String cards,

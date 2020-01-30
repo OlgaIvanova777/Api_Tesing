@@ -63,7 +63,6 @@ public class TrelloTests {
                 .get(TRELLO__BOARD_WITH_CARDS_API_URL)
                 .prettyPeek()
                 .then()
-
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK);
         System.out.println("\n====================GET FINISH=================================================");
@@ -101,20 +100,20 @@ public class TrelloTests {
         String card_id = "5e31b5a9e4b3d630c081bd9d";
         int number = (int) (Math.random() * 1000 + 51);
 
-       /* //POST
+        //POST
         System.out.println("\n====================POST START=================================================");
-        RestAssured
+        Object newBoardId = RestAssured
                 .given()
-               // .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
                 .when()
-                .body(TrelloApi.with().new_board("BOARD_"+ number))
+                .body(TrelloApi.with().new_board("BOARD_" + number))
                 .post(TRELLO_NEW_BOARD_API_URL)
                 .prettyPeek()
                 .then()
                 .assertThat()
-                .statusCode(201);
-        System.out.println("\n====================POST FINISH=================================================");*/
+                .statusCode(201)
+                .extract().path(ID);
+        System.out.println("\n====================POST FINISH=================================================");
 
 
         //PUT
@@ -133,16 +132,17 @@ public class TrelloTests {
         System.out.println("\n====================PUT FINISH=================================================");
 
 
-       //DELETE
-/*        RestAssured
+      //DELETE
+        RestAssured
                 .given()
                 .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log()
                 .everything()
-                .delete(TRELLO_NEW_BOARD_API_URL + "591c26f96ab496d404b32a2d").prettyPeek()
+                .delete(TRELLO_NEW_BOARD_API_URL + newBoardId)
+                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .statusLine("HTTP/1.1 200 OK");*/
+                .statusLine("HTTP/1.1 200 OK");
     }
 
 
