@@ -12,6 +12,7 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -39,21 +40,24 @@ public class TrelloApi {
             trelloApi = gcApi;
         }
 
-        public ApiBuilder text(String text) {
-            trelloApi.params.put(PARAM_TEXT, text);
+        public ApiBuilder id(String id) {
+            trelloApi.params.put(ID, id);
             return this;
         }
 
-        public ApiBuilder options(String options) {
-            trelloApi.params.put(PARAM_OPTIONS, options);
+        public ApiBuilder name(String name) {
+            trelloApi.params.put(NAME_PARAM, name);
             return this;
         }
 
-        public ApiBuilder language(Languages language) {
-            trelloApi.params.put(PARAM_LANG, language.languageCode);
+        public ApiBuilder key(){
+            trelloApi.params.put(KEY_PARAM, TRELLO_API_KEY_VALUE);
             return this;
         }
-
+        public ApiBuilder token() {
+            trelloApi.params.put(TOKEN_PARAM, TRELLO_API_TOKEN_VALUE);
+            return this;
+        }
 
 
 
@@ -147,9 +151,13 @@ public class TrelloApi {
 
     //get ready Boards answers list form api response
     public static List<Boards> getTrelloBoardsAnswers(Response response){
-
         return new Gson().fromJson( response.asString().trim(), new TypeToken<List<Boards>>() {}.getType());
     }
+
+/*    public static <T> List<T> getList(String jsonArray, Class<Board> clazz) {
+        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
+        return new Gson().fromJson(jsonArray, typeOfT);
+    }*/
 /*    //get ready Lists answers list form api response
     public static List<Lists> getTrelloListAnswers(Response response){
         return new Gson().fromJson( response.asString().trim(), new TypeToken<List<Lists>>() {}.getType());

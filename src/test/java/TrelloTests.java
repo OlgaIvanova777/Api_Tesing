@@ -1,4 +1,5 @@
 import beans.Boards;
+import core.Board;
 import core.TrelloApi;
 import core.TrelloConstants;
 import io.restassured.RestAssured;
@@ -14,6 +15,7 @@ import java.util.List;
 import static core.TrelloConstants.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.number.OrderingComparison.lessThan;
 
 
@@ -165,34 +167,26 @@ public class TrelloTests {
                 .callApi()
                 .then().specification(YandexSpellerApi.successResponse());
     }*/
-//
-//
-
-
-
-
-
-
-    @Test
-    public void CheckBoardDetails() {
-        //GET
-        RestAssured
-                .given()
-                .param(TrelloConstants.ID, "5e31b574d56d512ae05a650d")
-                .log().everything()
-                .get(TRELLO_NEW_BOARD_API_URL)
-                .prettyPeek();
-        System.out.println("\n=====================================================================");
-    }
 
     @Test
     public void CheckBoardDetails_2() {
+
         List<Boards> answers =
+                TrelloApi.getTrelloBoardsAnswers(
+                        TrelloApi.with()
+                                .key()
+                                .token()
+                                .callGetApi(TRELLO_ALL_BOARDS_API_URL));
+       assertThat("expected number of answers is wrong.", answers.size(), equalTo(6));
+
+       /* Response response = ;
+       List<Boards> answers =
                         TrelloApi.getTrelloBoardsAnswers(
-                                TrelloApi.with().board().callGetApi(TRELLO_BOARD_API_URL));
+                                response,
+                                Board.class);*/
         //assertThat("expected number of answers is wrong.", answers.size(), equalTo(3));
-        System.out.println("\n=====================================================================");
-        System.out.println("answers.get(0).totalMembersPerBoard " + answers.get(0).totalMembersPerBoard);
+        System.out.println("\n=====================================================================" + answers.size());
+    //    System.out.println("answers.get(0).totalMembersPerBoard " + answers.get(0).totalMembersPerBoard);
    //     assertThat(answers.get(0).totalMembersPerBoard, equalTo("1"));
 
     }
