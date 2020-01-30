@@ -26,11 +26,12 @@ public class TrelloTests {
 //
 //
       @Test
-    public void simpleSpellerApiCall() {
+    public void simpleTrelloApiCall() {
         RestAssured
                 .given()
-//                .queryParam(PARAM_TEXT, WRONG_WORD_EN)
-//                .params(PARAM_LANG, Languages.EN, "CustomParameter", "valueOfParam")
+                .queryParam(ACTIONS_PARAM, "All")
+                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
+                .param(FIELDS_PARAM, "name,desc,descData,closed,idOrganization,pinned,url,shortUrl,prefs,labelNames")
                 .accept(ContentType.JSON)
                 .header("x-trello-version", "1.1963.0")
                 .and()
@@ -43,9 +44,10 @@ public class TrelloTests {
 
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-            //    .body(Matchers.allOf(
-        //                Matchers.stringContainsInOrder(Arrays.asList(WRONG_WORD_EN, RIGHT_WORD_EN)),
-                     //   Matchers.containsString("\"code\":1")))
+                .body(Matchers.allOf(
+                        Matchers.stringContainsInOrder(Arrays.asList(ID, "TrelloTestBoard")),
+                        Matchers.containsString("https://trello.com/"))
+                                )
                 .contentType(ContentType.JSON)
                 .time(lessThan(20000L)); // Milliseconds
     }
