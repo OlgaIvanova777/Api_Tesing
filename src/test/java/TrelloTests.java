@@ -20,9 +20,11 @@ import static org.hamcrest.number.OrderingComparison.lessThan;
 
 
 public class TrelloTests {
-    private String ID = "5e31b574d56d512ae05a650d";
-    private String TRELLO_BOARD_API_URL = TRELLO_NEW_BOARD_API_URL + ID;
-////
+    private final String ID = "5e31b574d56d512ae05a650d";
+    private final String TRELLO_BOARD_API_URL = TRELLO_NEW_BOARD_API_URL + ID;
+    private final String TRELLO_CARDS_API_URL = TRELLO_BOARD_API_URL + "/cards";
+
+    ////
 //
 //
       @Test
@@ -38,7 +40,7 @@ public class TrelloTests {
                 .body("backgroundImageScaled")
                 .log().everything()
                 .when()
-                .get(TRELLO_NEW_BOARD_API_URL + ID)
+                .get(TRELLO_BOARD_API_URL)
                 .prettyPeek()
                 .then()
 
@@ -54,72 +56,88 @@ public class TrelloTests {
 
     // different http methods calls
     @Test
-    public void spellerApiCallsWithDifferentMethods() {
+    public void trelloApiCallsWithDifferentMethods() {
         //GET
+        System.out.println("\n====================GET START=================================================");
         RestAssured
                 .given()
-        //        .param(PARAM_TEXT, WRONG_WORD_EN)
+                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
-                .get(TRELLO_NEW_BOARD_API_URL + ID)
-                .prettyPeek();
-        System.out.println("\n=====================================================================");
+                .get(TRELLO_CARDS_API_URL)
+                .prettyPeek()
+                .then()
+
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK);
+        System.out.println("\n====================GET FINISH=================================================");
 
         //POST
+        System.out.println("\n====================POST START=================================================");
         RestAssured
                 .given()
-             //   .param(PARAM_TEXT, WRONG_WORD_EN)
+                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
-                .post(TRELLO_NEW_BOARD_API_URL + ID)
+                .post(TRELLO_CARDS_API_URL)
                 .prettyPeek();
-        System.out.println("\n=====================================================================");
+        System.out.println("\n====================POST FINISH=================================================");
 
         //HEAD
+        System.out.println("\n====================HEAD START=================================================");
         RestAssured
                 .given()
-         //       .param(PARAM_TEXT, WRONG_WORD_EN)
+                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
-                .head(TRELLO_NEW_BOARD_API_URL + ID)
-                .prettyPeek();
-        System.out.println("\n=====================================================================");
+                .head(TRELLO_CARDS_API_URL)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK);
+        System.out.println("\n====================HEAD FINISH=================================================");
 
         //OPTIONS
+        System.out.println("\n====================OPTIONS START=================================================");
         RestAssured
                 .given()
-        //        .param(PARAM_TEXT, WRONG_WORD_EN)
+                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
-                .options(TRELLO_NEW_BOARD_API_URL + ID)
-                .prettyPeek();
-        System.out.println("\n=====================================================================");
+                .options(TRELLO_CARDS_API_URL)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK);
+        System.out.println("\n====================OPTIONS FINISH=================================================");
 
         //PUT
+        System.out.println("\n====================PUT START=================================================");
         RestAssured
                 .given()
-      //          .param(PARAM_TEXT, WRONG_WORD_EN)
+                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
-                .put(TRELLO_NEW_BOARD_API_URL + ID)
+                .put(TRELLO_CARDS_API_URL)
                 .prettyPeek();
-        System.out.println("\n=====================================================================");
+        System.out.println("\n====================PUT FINISH=================================================");
 
         //PATCH
+        System.out.println("\n====================PATCH START=================================================");
         RestAssured
                 .given()
-          //      .param(PARAM_TEXT, WRONG_WORD_EN)
+                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log()
                 .everything()
-                .patch(TRELLO_NEW_BOARD_API_URL + ID)
+                .patch(TRELLO_CARDS_API_URL)
                 .prettyPeek();
-        System.out.println("\n=====================================================================");
+        System.out.println("\n====================PATCH FINISH=================================================");
 
-        //DELETE
+/*        //DELETE
         RestAssured
                 .given()
-              //  .param(PARAM_TEXT, WRONG_WORD_EN)
+                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log()
                 .everything()
-                .delete(TRELLO_NEW_BOARD_API_URL + ID).prettyPeek()
+                .delete(TRELLO_CARDS_API_URL).prettyPeek()
                 .then()
                 .statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-                .statusLine("HTTP/1.1 405 Method not allowed");
+                .statusLine("HTTP/1.1 405 Method not allowed");*/
     }
 
 
