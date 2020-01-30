@@ -140,17 +140,17 @@ public class TrelloApi {
 
 
  //TRELLO_NEW_BOARD_API_URL
-        public ApiBuilder new_board(String name, String defaultLabels, String defaultLists,
+        public ApiBuilder new_board(String name /*,String defaultLabels, String defaultLists,
                                     String keepFromSource, String prefs_permissionLevel, String prefs_voting,
                                     String prefs_comments, String prefs_invitations, String prefs_selfJoin,
                                     String prefs_cardCovers, String prefs_background, String prefs_cardAging,
-                                    String key, String token) {
+                                    String key, String token*/) {
             trelloApi.params.put(NAME_PARAM, name);
-            trelloApi.params.put(DEFAULT_LABELS_PARAM, defaultLabels);
+          /*  trelloApi.params.put(DEFAULT_LABELS_PARAM, defaultLabels);
             trelloApi.params.put(DEFAULT_LISTS_PARAM, defaultLists);
-          /*  trelloApi.params.put(DESC_PARAM, desc);
+          *//*  trelloApi.params.put(DESC_PARAM, desc);
             trelloApi.params.put(ID_ORGANIZATION_PARAM, idOrganization);
-            trelloApi.params.put(ID_BOARD_SOURCE_PARAM, idBoardSource);*/
+            trelloApi.params.put(ID_BOARD_SOURCE_PARAM, idBoardSource);*//*
             trelloApi.params.put(KEEP_FROM_SOURCE_PARAM, keepFromSource);
 //            trelloApi.params.put(POWER_UPS_PARAM, powerUps);
             trelloApi.params.put(PREFS_PERMISSION_LEVEL_PARAM, prefs_permissionLevel);
@@ -162,42 +162,16 @@ public class TrelloApi {
             trelloApi.params.put(PREFS_BACKGROUND_PARAM, prefs_background);
             trelloApi.params.put(PREFS_CARD_AGING_PARAM, prefs_cardAging);
             trelloApi.params.put(KEY_PARAM, key);
-            trelloApi.params.put(TOKEN_PARAM, token);
+            trelloApi.params.put(TOKEN_PARAM, token);*/
             return this;
         }
-        public ApiBuilder new_board(String name) {
-            return new_board(name, "true", "true",
+ /*       public ApiBuilder new_board(String name) {
+            return new_board(name*//*, "true", "true",
                     "none", "private", "disabled",
                     "members", "members", "true",
                     "true","blue" , "regular",
-                    TRELLO_API_KEY_VALUE, TRELLO_API_TOKEN_VALUE);
-        }
-
-
-
-/*
-    public static final String ACTIONS_PARAM = "actions";
-    public static final String BOARD_STARS_PARAM = "boardStars";
-    public static final String CARDS_PARAM = "cards";
-    public static final String CARD_PLUGIN_DATA_PARAM = "card_pluginData";
-    public static final String CHECKLISTS_PARAM = "checklists";
-    public static final String CUSTOM_FIELDS_PARAM = "customFields";
-    public static final String FIELDS_PARAM = "fields";
-    public static final String LABELS_PARAM = "labels";
-    public static final String LISTS_PARAM = "lists";
-    public static final String MEMBERS_PARAM = "members";
-    public static final String MEMBERSHIPS_PARAM = "memberships";
-    public static final String MEMBERS_INVITED_PARAM = "membersInvited";
-    public static final String MEMBERS_INVITED_FIELDS_PARAM = "membersInvited_fields";
-    public static final String PLUGIN_DATA_PARAM = "pluginData";
-    public static final String ORGANIZATION_PARAM = "organization";
-    public static final String ORGANIZATION_PLUGIN_DATA_PARAM = "organization_pluginData";
-    public static final String MY_PREFS_PARAM = "myPrefs";
-    public static final String TAGS_PARAM = "tags";
-        public static final String ID = "id";
-*/
-
-
+                    TRELLO_API_KEY_VALUE, TRELLO_API_TOKEN_VALUE*//*);
+        }*/
 
         //TRELLO_NEW_BOARD_API_URL
         public ApiBuilder board(String actions, String boardStars, String cards,

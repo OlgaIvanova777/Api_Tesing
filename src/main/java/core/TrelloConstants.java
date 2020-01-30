@@ -23,7 +23,7 @@ public class TrelloConstants {
 //
 //    public static final String TRELLO_LISTS = "https://api.trello.com/1/boards/%s/lists?cards=none&card_fields=all&filter=open&fields=all&key=%s&token=%s";
 //
-//    public static final String TRELLO_CARD = "https://api.trello.com/1/cards?desc=%s&idList=idList&keepFromSource=all&key=%s&token=%s";
+    public static final String TRELLO_NEW_CARDS_API_URL = "https://api.trello.com/1/cards/";
 //
 //    public static final String TRELLO_GET_CARD = "https://api.trello.com/1/cards/%s?attachments=false&attachment_fields=all&members=false&membersVoted=false&checkItemStates=false&checklists=none&checklist_fields=all&board=false&list=false&pluginData=false&stickers=false&sticker_fields=all&customFieldItems=false&key=%s&token=%s";
 //
@@ -68,8 +68,9 @@ public class TrelloConstants {
     public static final String ORGANIZATION_PLUGIN_DATA_PARAM = "organization_pluginData";
     public static final String MY_PREFS_PARAM = "myPrefs";
     public static final String TAGS_PARAM = "tags";
+    public static final String COLOR_PARAM = "color";
 
-
+/*
     @FunctionalInterface
     public interface TripleFunction<M extends String, T, U, R> {
         R replace(M str, T key, U value);
@@ -87,7 +88,7 @@ public class TrelloConstants {
         dictionary.forEach((key, value) -> result.set(replaceFunction.replace(result.get(), key, value)));
 
         System.out.println("New String = " + result.get());
-    }
+    }*/
 }
 
 

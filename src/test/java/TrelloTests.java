@@ -6,7 +6,6 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,18 +14,16 @@ import java.util.List;
 import static core.TrelloConstants.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.number.OrderingComparison.lessThan;
 
 
 public class TrelloTests {
-    private final String ID = "5e31b574d56d512ae05a650d";
-    private final String TRELLO_BOARD_API_URL = TRELLO_NEW_BOARD_API_URL + ID;
-    private final String TRELLO_CARDS_API_URL = TRELLO_BOARD_API_URL + "/cards";
+    private final String BOARD_ID = "5e31b574d56d512ae05a650d";
+    private final String TRELLO_BOARD_API_URL = TRELLO_NEW_BOARD_API_URL + BOARD_ID;
+    private final String TRELLO__BOARD_WITH_CARDS_API_URL = TRELLO_BOARD_API_URL + "/cards";
+  //  private final String TRELLO_CARD_API_URL = TRELLO_NEW_BOARD_API_URL + "/%s";
 
-    ////
-//
-//
+
       @Test
     public void simpleTrelloApiCall() {
         RestAssured
@@ -47,7 +44,7 @@ public class TrelloTests {
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
                 .body(Matchers.allOf(
-                        Matchers.stringContainsInOrder(Arrays.asList(ID, "TrelloTestBoard")),
+                        Matchers.stringContainsInOrder(Arrays.asList(BOARD_ID, "TrelloTestBoard")),
                         Matchers.containsString("https://trello.com/"))
                                 )
                 .contentType(ContentType.JSON)
@@ -56,14 +53,14 @@ public class TrelloTests {
 
     // different http methods calls
     @Test
-    public void trelloApiCallsWithDifferentMethods() {
+    public void trelloApiCallsWithDifferentReadMethods() {
         //GET
         System.out.println("\n====================GET START=================================================");
         RestAssured
                 .given()
                 .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
-                .get(TRELLO_CARDS_API_URL)
+                .get(TRELLO__BOARD_WITH_CARDS_API_URL)
                 .prettyPeek()
                 .then()
 
@@ -71,23 +68,13 @@ public class TrelloTests {
                 .statusCode(HttpStatus.SC_OK);
         System.out.println("\n====================GET FINISH=================================================");
 
-        //POST
-        System.out.println("\n====================POST START=================================================");
-        RestAssured
-                .given()
-                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
-                .log().everything()
-                .post(TRELLO_CARDS_API_URL)
-                .prettyPeek();
-        System.out.println("\n====================POST FINISH=================================================");
-
         //HEAD
         System.out.println("\n====================HEAD START=================================================");
         RestAssured
                 .given()
                 .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
-                .head(TRELLO_CARDS_API_URL)
+                .head(TRELLO__BOARD_WITH_CARDS_API_URL)
                 .prettyPeek()
                 .then()
                 .assertThat()
@@ -100,12 +87,35 @@ public class TrelloTests {
                 .given()
                 .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
-                .options(TRELLO_CARDS_API_URL)
+                .options(TRELLO__BOARD_WITH_CARDS_API_URL)
                 .prettyPeek()
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK);
         System.out.println("\n====================OPTIONS FINISH=================================================");
+    }
+
+    // different http methods calls
+    @Test
+    public void trelloApiCallsWithDifferentWriteMethods() {
+        String card_id = "5e31b5a9e4b3d630c081bd9d";
+        int number = (int) (Math.random() * 1000 + 51);
+
+       /* //POST
+        System.out.println("\n====================POST START=================================================");
+        RestAssured
+                .given()
+               // .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
+                .log().everything()
+                .when()
+                .body(TrelloApi.with().new_board("BOARD_"+ number))
+                .post(TRELLO_NEW_BOARD_API_URL)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(201);
+        System.out.println("\n====================POST FINISH=================================================");*/
+
 
         //PUT
         System.out.println("\n====================PUT START=================================================");
@@ -113,31 +123,26 @@ public class TrelloTests {
                 .given()
                 .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
-                .put(TRELLO_CARDS_API_URL)
-                .prettyPeek();
+                .when()
+                .param(NAME_PARAM, "Order cat's food ASAP")
+                .put(TRELLO_NEW_CARDS_API_URL + card_id)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(200);
         System.out.println("\n====================PUT FINISH=================================================");
 
-        //PATCH
-        System.out.println("\n====================PATCH START=================================================");
-        RestAssured
-                .given()
-                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
-                .log()
-                .everything()
-                .patch(TRELLO_CARDS_API_URL)
-                .prettyPeek();
-        System.out.println("\n====================PATCH FINISH=================================================");
 
-/*        //DELETE
-        RestAssured
+       //DELETE
+/*        RestAssured
                 .given()
                 .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log()
                 .everything()
-                .delete(TRELLO_CARDS_API_URL).prettyPeek()
+                .delete(TRELLO_NEW_BOARD_API_URL + "591c26f96ab496d404b32a2d").prettyPeek()
                 .then()
-                .statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
-                .statusLine("HTTP/1.1 405 Method not allowed");*/
+                .statusCode(HttpStatus.SC_OK)
+                .statusLine("HTTP/1.1 200 OK");*/
     }
 
 
