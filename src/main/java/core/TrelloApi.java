@@ -1,6 +1,8 @@
 package core;
 
 import beans.Boards;
+import beans.Cards;
+import beans.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.restassured.RestAssured;
@@ -154,20 +156,17 @@ public class TrelloApi {
         return new Gson().fromJson( response.asString().trim(), new TypeToken<List<Boards>>() {}.getType());
     }
 
-/*    public static <T> List<T> getList(String jsonArray, Class<Board> clazz) {
-        Type typeOfT = TypeToken.getParameterized(List.class, clazz).getType();
-        return new Gson().fromJson(jsonArray, typeOfT);
-    }*/
-/*    //get ready Lists answers list form api response
+
+    //get ready Lists answers list form api response
     public static List<Lists> getTrelloListAnswers(Response response){
         return new Gson().fromJson( response.asString().trim(), new TypeToken<List<Lists>>() {}.getType());
     }
     //get ready Cards answers list form api response
     public static List<Cards> getTrelloCardsAnswers(Response response){
         return new Gson().fromJson( response.asString().trim(), new TypeToken<List<Cards>>() {}.getType());
-    }*/
+    }
 
-    //set base request and response specifications tu use in tests
+    //set base request and response specifications to use in tests
     public static ResponseSpecification successResponse(){
         return new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON)
@@ -181,9 +180,7 @@ public class TrelloApi {
         return new RequestSpecBuilder()
                 .setAccept(ContentType.XML)
                 .setRelaxedHTTPSValidation()
-                .addHeader("custom header2", "header2.value")
-                .addQueryParam("requestID", new Random().nextLong())
-                .setBaseUri(TRELLO_NEW_BOARD_API_URL)
+                .setBaseUri(TRELLO_ALL_BOARDS_API_URL)
                 .build();
     }
 

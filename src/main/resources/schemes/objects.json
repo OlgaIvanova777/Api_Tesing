@@ -20,7 +20,7 @@
         "warnAt": 1800000
       }
     },
-/*    "checklists": {
+    "checklists": {
       "perBoard": {
         "status": "ok",
         "disableAt": 15200,
@@ -33,18 +33,18 @@
         "disableAt": 950,
         "warnAt": 900
       }
-    },*/
+    },
     "lists": {
       "openPerBoard": {
         "status": "ok",
         "disableAt": 475,
         "warnAt": 450
-      }//,
-/*      "totalPerBoard": {
+      },
+     "totalPerBoard": {
         "status": "ok",
         "disableAt": 2850,
         "warnAt": 2700
-      }*/
+      }
     }
   }
 }

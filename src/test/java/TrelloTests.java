@@ -23,8 +23,6 @@ public class TrelloTests {
     private final String BOARD_ID = "5e31b574d56d512ae05a650d";
     private final String TRELLO_BOARD_API_URL = TRELLO_NEW_BOARD_API_URL + BOARD_ID;
     private final String TRELLO__BOARD_WITH_CARDS_API_URL = TRELLO_BOARD_API_URL + "/cards";
-  //  private final String TRELLO_CARD_API_URL = TRELLO_NEW_BOARD_API_URL + "/%s";
-
 
       @Test
     public void simpleTrelloApiCall() {
@@ -148,25 +146,24 @@ public class TrelloTests {
     }
 
 
-/*    // use base request and response specifications to form request and validate response.
+    // use base request and response specifications to form request and validate response.
     @Test
     public void useBaseRequestAndResponseSpecifications() {
         RestAssured
-                .given(YandexSpellerApi.baseRequestConfiguration())
-                .param(PARAM_TEXT, WRONG_WORD_EN)
+                .given(TrelloApi.baseRequestConfiguration())
+                .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .get().prettyPeek()
-                .then().specification(YandexSpellerApi.successResponse());
+                .then().specification(TrelloApi.successResponse());
     }
 
     @Test
     public void reachBuilderUsage(){
-        YandexSpellerApi.with()
-                .language(Languages.UK)
-                .options("5")
-                .text(WRONG_WORD_UK)
-                .callApi()
-                .then().specification(YandexSpellerApi.successResponse());
-    }*/
+        TrelloApi.with()
+                .key()
+                .token()
+                .callGetApi(TRELLO_ALL_BOARDS_API_URL)
+                .then().specification(TrelloApi.successResponse());
+    }
 
     @Test
     public void CheckBoardDetails_2() {
@@ -179,15 +176,16 @@ public class TrelloTests {
                                 .callGetApi(TRELLO_ALL_BOARDS_API_URL));
        assertThat("expected number of answers is wrong.", answers.size(), equalTo(6));
 
+        boolean oliTestBoard = answers.contains("OliTestBoard");
+        String status = answers.get(2).totalMembersPerBoard.status.toString();
        /* Response response = ;
        List<Boards> answers =
                         TrelloApi.getTrelloBoardsAnswers(
                                 response,
                                 Board.class);*/
         //assertThat("expected number of answers is wrong.", answers.size(), equalTo(3));
-        System.out.println("\n=====================================================================" + answers.size());
-    //    System.out.println("answers.get(0).totalMembersPerBoard " + answers.get(0).totalMembersPerBoard);
-   //     assertThat(answers.get(0).totalMembersPerBoard, equalTo("1"));
+        System.out.println("\n===================================================================== " + answers.size());
+        System.out.println(status);
 
     }
 }
