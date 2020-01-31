@@ -1,36 +1,29 @@
-import beans.Boards;
 import beans.Objects;
 import core.TrelloApi;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.http.Header;
 import org.apache.http.HttpStatus;
+import org.assertj.core.api.SoftAssertions;
 import org.hamcrest.Matchers;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.sun.org.apache.xerces.internal.util.FeatureState.is;
 import static core.TrelloConstants.*;
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.number.OrderingComparison.lessThan;
 
 
 public class TrelloTests {
+    public static final String CARD_ID = "5e31b5a9e4b3d630c081bd9d";
     private final String BOARD_ID = "5e31b574d56d512ae05a650d";
     private final String TRELLO_BOARD_API_URL = TRELLO_NEW_BOARD_API_URL + BOARD_ID;
     private final String TRELLO__BOARD_WITH_CARDS_API_URL = TRELLO_BOARD_API_URL + "/cards";
+    private final String NEW_CARD_NAME = "Order cat's food ASAP";
 
-    @Before
-    public void setBaseRequestConfiguration(){
-        RestAssured.requestSpecification = TrelloApi.baseRequestConfiguration();
-    }
-
-      @Test
+    @Test
     public void simpleTrelloApiCall() {
         RestAssured
                 .given()
@@ -52,14 +45,16 @@ public class TrelloTests {
                 .body(Matchers.allOf(
                         Matchers.stringContainsInOrder(Arrays.asList(BOARD_ID, "TrelloTestBoard")),
                         Matchers.containsString("https://trello.com/"))
-                                )
+                )
                 .contentType(ContentType.JSON)
                 .time(lessThan(20000L)); // Milliseconds
     }
 
     // different http methods calls
     @Test
-    public void trelloApiCallsWithDifferentReadMethods() {
+    public void trelloApiCallsWithDifferentMethods() {
+        int number = (int) (Math.random() * 1000 + 51);
+
         //GET
         System.out.println("\n====================GET START=================================================");
         RestAssured
@@ -98,13 +93,6 @@ public class TrelloTests {
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK);
         System.out.println("\n====================OPTIONS FINISH=================================================");
-    }
-
-    // different http methods calls
-    @Test
-    public void trelloApiCallsWithDifferentWriteMethods() {
-        String card_id = "5e31b5a9e4b3d630c081bd9d";
-        int number = (int) (Math.random() * 1000 + 51);
 
         //POST
         System.out.println("\n====================POST START=================================================");
@@ -113,15 +101,15 @@ public class TrelloTests {
                 .log().everything()
                 .baseUri(TRELLO_NEW_BOARD_API_URL)
                 .contentType(ContentType.JSON)
-                .body("{\"name\": \"BOARD_"+number+"\", \"key\": \"" + TRELLO_API_KEY_VALUE +
-                        "\", \"token\": \"" + TRELLO_API_TOKEN_VALUE+"\"}")
+                .body("{\"name\": \"BOARD_" + number + "\", \"key\": \"" + TRELLO_API_KEY_VALUE +
+                        "\", \"token\": \"" + TRELLO_API_TOKEN_VALUE + "\"}")
                 .when()
                 .post()
                 .prettyPeek()
                 .then()
                 .statusCode(200)
                 .extract().as(Objects.class).getId();
-  System.out.println("\n====================POST FINISH=================================================");
+        System.out.println("\n====================POST FINISH=================================================");
 
 
         //PUT
@@ -131,8 +119,8 @@ public class TrelloTests {
                 .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
                 .log().everything()
                 .when()
-                .param(NAME_PARAM, "Order cat's food ASAP")
-                .put(TRELLO_NEW_CARDS_API_URL + card_id)
+                .param(NAME_PARAM, NEW_CARD_NAME)
+                .put(TRELLO_NEW_CARDS_API_URL + CARD_ID)
                 .prettyPeek()
                 .then()
                 .assertThat()
@@ -142,7 +130,7 @@ public class TrelloTests {
 
         System.out.println("\n====================DELETE START=================================================");
 
-      //DELETE
+        //DELETE
         RestAssured
                 .given()
                 .params(KEY_PARAM, TRELLO_API_KEY_VALUE, TOKEN_PARAM, TRELLO_API_TOKEN_VALUE)
@@ -168,7 +156,7 @@ public class TrelloTests {
     }
 
     @Test
-    public void reachBuilderUsage(){
+    public void reachBuilderUsage() {
         TrelloApi.with()
                 .key()
                 .token()
@@ -177,37 +165,72 @@ public class TrelloTests {
     }
 
     @Test
-    public void CheckBoardDetails_2() {
+    public void CheckBoardsForMember() {
 
         List<Objects> answers =
-                TrelloApi.getTrelloBoardsAnswers(
+                TrelloApi.getAnswers(
                         TrelloApi.with()
                                 .key()
                                 .token()
                                 .callGetApi(TRELLO_ALL_BOARDS_API_URL));
-      assertThat("expected number of answers is wrong.", answers.size(), equalTo(6));
+
+        assertThat("expected number of answers is wrong.", answers.size(), equalTo(5));
     }
 
-/*    @Test
-    public void  adsefs(){
-        String card_id = "5e31b5a9e4b3d630c081bd9d";
-        int number = (int) (Math.random() * 1000 + 51);
+    @Test
+    public void checkCardsDetails() {
 
-        //POST
-        System.out.println("\n====================POST START=================================================");
-        Object newBoardId = RestAssured
-                .given()
-                .log().everything()
-                .when()
-                .body(TrelloApi.with().new_board("BOARD_" + number))
-                .post(TRELLO_NEW_BOARD_API_URL)
-                .prettyPeek()
-                .then()
-                .assertThat()
-                .statusCode(201)
-                .extract().path(ID);
-        System.out.println("\n====================POST FINISH=================================================");
-    }*/
+        Objects answer = TrelloApi.getAnswer(
+                TrelloApi.with().key().token().callGetApi(TRELLO_NEW_CARDS_API_URL + CARD_ID));
+        assertThat(answer.getName(), equalTo(NEW_CARD_NAME));
+        assertThat(answer.getDesc(), equalTo("Farmina Vet Life 5 kg"));
+        assertThat(answer.getId(), equalTo(CARD_ID));
+    }
+
+
+    @Test
+    public void CheckBoardsForMember2() {
+
+        List<Objects> columns =
+                TrelloApi.getAnswers(
+                        TrelloApi.with()
+                                .key()
+                                .token()
+                                .callGetApi(TRELLO_NEW_BOARD_API_URL + BOARD_ID + "/lists"));
+
+        String column0 = columns.get(0).getId();
+        String column1 = columns.get(1).getId();
+        String column2 = columns.get(2).getId();
+
+        List<Objects> cards0 =
+                TrelloApi.getAnswers(
+                        TrelloApi.with()
+                                .key()
+                                .token()
+                                .callGetApi(TRELLO_LIST_API_URL + column0) + "/cards"));
+
+        List<Objects> cards1 =
+                TrelloApi.getAnswers(
+                        TrelloApi.with()
+                                .key()
+                                .token()
+                                .callGetApi(TRELLO_LIST_API_URL + column1+ "/cards"));
+
+        List<Objects> cards2 =
+                TrelloApi.getAnswers(
+                        TrelloApi.with()
+                                .key()
+                                .token()
+                                .callGetApi(TRELLO_LIST_API_URL + column2+ "/cards"));
+
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(columns.size()).isEqualTo(3);
+        softly.assertThat(columns.get(0).getName()).isEqualTo("To Do");
+        softly.assertThat(columns.get(2).getName()).isEqualTo("Doing");
+        softly.assertThat(columns.get(3).getName()).isEqualTo("Done");
+
 
 /*    @Test
     public void testClearRA() {
@@ -258,4 +281,5 @@ public class TrelloTests {
                 .then()
                 .statusCode(201)
     }*/
+    }
 }
