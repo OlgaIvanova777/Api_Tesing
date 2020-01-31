@@ -70,11 +70,10 @@
                 <version>0.5.1</version>
                 <configuration>
                     <sourceDirectory>${basedir}/src/main/resources/schemes</sourceDirectory>
-                    <outputDirectory>${basedir}/src/main/java</outputDirectory>
+                    <outputDirectory>${project.build.directory}/generated-sources/jsonschemas</outputDirectory>
                     <targetPackage>beans</targetPackage>
                     <addCompileSourceRoot>true</addCompileSourceRoot>
                     <sourceType>json</sourceType>
-                    <includeAccessors>false</includeAccessors>
                     <annotationStyle>gson</annotationStyle>
                 </configuration>
                 <executions>

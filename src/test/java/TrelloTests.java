@@ -1,17 +1,18 @@
 import beans.Boards;
-import core.Board;
+import beans.Objects;
 import core.TrelloApi;
-import core.TrelloConstants;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
+import io.restassured.http.Header;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.sun.org.apache.xerces.internal.util.FeatureState.is;
 import static core.TrelloConstants.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,6 +24,11 @@ public class TrelloTests {
     private final String BOARD_ID = "5e31b574d56d512ae05a650d";
     private final String TRELLO_BOARD_API_URL = TRELLO_NEW_BOARD_API_URL + BOARD_ID;
     private final String TRELLO__BOARD_WITH_CARDS_API_URL = TRELLO_BOARD_API_URL + "/cards";
+
+    @Before
+    public void setBaseRequestConfiguration(){
+        RestAssured.requestSpecification = TrelloApi.baseRequestConfiguration();
+    }
 
       @Test
     public void simpleTrelloApiCall() {
@@ -102,18 +108,20 @@ public class TrelloTests {
 
         //POST
         System.out.println("\n====================POST START=================================================");
-        Object newBoardId = RestAssured
-                .given()
+
+        Object newBoardId = RestAssured.given()
                 .log().everything()
+                .baseUri(TRELLO_NEW_BOARD_API_URL)
+                .contentType(ContentType.JSON)
+                .body("{\"name\": \"BOARD_"+number+"\", \"key\": \"" + TRELLO_API_KEY_VALUE +
+                        "\", \"token\": \"" + TRELLO_API_TOKEN_VALUE+"\"}")
                 .when()
-                .body(TrelloApi.with().new_board("BOARD_" + number))
-                .post(TRELLO_NEW_BOARD_API_URL)
+                .post()
                 .prettyPeek()
                 .then()
-                .assertThat()
-                .statusCode(201)
-                .extract().path(ID);
-        System.out.println("\n====================POST FINISH=================================================");
+                .statusCode(200)
+                .extract().as(Objects.class).getId();
+  System.out.println("\n====================POST FINISH=================================================");
 
 
         //PUT
@@ -132,6 +140,8 @@ public class TrelloTests {
         System.out.println("\n====================PUT FINISH=================================================");
 
 
+        System.out.println("\n====================DELETE START=================================================");
+
       //DELETE
         RestAssured
                 .given()
@@ -143,6 +153,7 @@ public class TrelloTests {
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .statusLine("HTTP/1.1 200 OK");
+        System.out.println("\n====================DELETE FINISH=================================================");
     }
 
 
@@ -168,24 +179,83 @@ public class TrelloTests {
     @Test
     public void CheckBoardDetails_2() {
 
-        List<Boards> answers =
+        List<Objects> answers =
                 TrelloApi.getTrelloBoardsAnswers(
                         TrelloApi.with()
                                 .key()
                                 .token()
                                 .callGetApi(TRELLO_ALL_BOARDS_API_URL));
-       assertThat("expected number of answers is wrong.", answers.size(), equalTo(6));
-
-        boolean oliTestBoard = answers.contains("OliTestBoard");
-        String status = answers.get(2).totalMembersPerBoard.status.toString();
-       /* Response response = ;
-       List<Boards> answers =
-                        TrelloApi.getTrelloBoardsAnswers(
-                                response,
-                                Board.class);*/
-        //assertThat("expected number of answers is wrong.", answers.size(), equalTo(3));
-        System.out.println("\n===================================================================== " + answers.size());
-        System.out.println(status);
-
+      assertThat("expected number of answers is wrong.", answers.size(), equalTo(6));
     }
+
+/*    @Test
+    public void  adsefs(){
+        String card_id = "5e31b5a9e4b3d630c081bd9d";
+        int number = (int) (Math.random() * 1000 + 51);
+
+        //POST
+        System.out.println("\n====================POST START=================================================");
+        Object newBoardId = RestAssured
+                .given()
+                .log().everything()
+                .when()
+                .body(TrelloApi.with().new_board("BOARD_" + number))
+                .post(TRELLO_NEW_BOARD_API_URL)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(201)
+                .extract().path(ID);
+        System.out.println("\n====================POST FINISH=================================================");
+    }*/
+
+/*    @Test
+    public void testClearRA() {
+          RestAssured.requestSpecification = TrelloApi.baseRequestConfiguration();
+
+
+        given()
+                .log().everything()
+                .baseUri(TRELLO_NEW_BOARD_API_URL)
+                .contentType(ContentType.JSON)
+                .body("{\"name\": \"someboardname7771\", \"key\": \"cfec53e08b8393f77dd65ba6525039c8\", \"token\": \"2f58ade2a9219cc72027f740317288f8afbf0045a49cbbacfdcf2c9fe3612610\"}")
+                .when()
+                .post()
+                .prettyPeek()
+                .then()
+                .statusCode(200)
+                .assertThat().body("name", equalTo("someboardname7771"));
+    }
+
+    @Test
+    public void testClearRA1() {
+        RestAssured.requestSpecification = TrelloApi.baseRequestConfiguration();
+
+
+        Objects as = given()
+                .log().everything()
+                .baseUri(TRELLO_NEW_BOARD_API_URL)
+                .contentType(ContentType.JSON)
+                .body("{\"name\": \"someboardname7771\", \"key\": \"cfec53e08b8393f77dd65ba6525039c8\", \"token\": \"2f58ade2a9219cc72027f740317288f8afbf0045a49cbbacfdcf2c9fe3612610\"}")
+                .when()
+                .post()
+                .prettyPeek()
+                .then()
+                .statusCode(200)
+                .extract().as(Objects.class);
+
+        assertThat(as.getName(), equalTo("someboardname7771"));
+        System.out.println(as);
+
+
+
+        Object newBoardId88 = RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .log().everything()
+                .when()
+                .body(TrelloApi.with().new_board("BOARD_" + number).callPostApi(TRELLO_NEW_BOARD_API_URL))
+                .then()
+                .statusCode(201)
+    }*/
 }
