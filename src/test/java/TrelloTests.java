@@ -165,7 +165,7 @@ public class TrelloTests {
     }
 
     @Test
-    public void CheckBoardsForMember() {
+    public void checkBoardsForMember() {
 
         List<Objects> answers =
                 TrelloApi.getAnswers(
@@ -178,7 +178,7 @@ public class TrelloTests {
     }
 
     @Test
-    public void checkCardsDetails() {
+    public void checkCardDetails() {
 
         Objects answer = TrelloApi.getAnswer(
                 TrelloApi.with().key().token().callGetApi(TRELLO_NEW_CARDS_API_URL + CARD_ID));
@@ -189,7 +189,7 @@ public class TrelloTests {
 
 
     @Test
-    public void CheckBoardsForMember2() {
+    public void checkCardsAreInCorrectStateOnBoard() {
         SoftAssertions softly = new SoftAssertions();
         String cardsURL = "%s%s/cards";
 
