@@ -190,6 +190,8 @@ public class TrelloTests {
 
     @Test
     public void CheckBoardsForMember2() {
+        SoftAssertions softly = new SoftAssertions();
+        String cardsURL = "%s%s/cards";
 
         List<Objects> columns =
                 TrelloApi.getAnswers(
@@ -207,79 +209,33 @@ public class TrelloTests {
                         TrelloApi.with()
                                 .key()
                                 .token()
-                                .callGetApi(TRELLO_LIST_API_URL + column0) + "/cards"));
+                                .callGetApi(String.format(cardsURL, TRELLO_LIST_API_URL, column0)));
 
         List<Objects> cards1 =
                 TrelloApi.getAnswers(
                         TrelloApi.with()
                                 .key()
                                 .token()
-                                .callGetApi(TRELLO_LIST_API_URL + column1+ "/cards"));
+                                .callGetApi(String.format(cardsURL, TRELLO_LIST_API_URL, column1)));
 
         List<Objects> cards2 =
                 TrelloApi.getAnswers(
                         TrelloApi.with()
                                 .key()
                                 .token()
-                                .callGetApi(TRELLO_LIST_API_URL + column2+ "/cards"));
-
-
-        SoftAssertions softly = new SoftAssertions();
+                                .callGetApi(String.format(cardsURL, TRELLO_LIST_API_URL, column2)));
 
         softly.assertThat(columns.size()).isEqualTo(3);
         softly.assertThat(columns.get(0).getName()).isEqualTo("To Do");
-        softly.assertThat(columns.get(2).getName()).isEqualTo("Doing");
-        softly.assertThat(columns.get(3).getName()).isEqualTo("Done");
+        softly.assertThat(columns.get(1).getName()).isEqualTo("Doing");
+        softly.assertThat(columns.get(2).getName()).isEqualTo("Done");
 
-
-/*    @Test
-    public void testClearRA() {
-          RestAssured.requestSpecification = TrelloApi.baseRequestConfiguration();
-
-
-        given()
-                .log().everything()
-                .baseUri(TRELLO_NEW_BOARD_API_URL)
-                .contentType(ContentType.JSON)
-                .body("{\"name\": \"someboardname7771\", \"key\": \"cfec53e08b8393f77dd65ba6525039c8\", \"token\": \"2f58ade2a9219cc72027f740317288f8afbf0045a49cbbacfdcf2c9fe3612610\"}")
-                .when()
-                .post()
-                .prettyPeek()
-                .then()
-                .statusCode(200)
-                .assertThat().body("name", equalTo("someboardname7771"));
-    }
-
-    @Test
-    public void testClearRA1() {
-        RestAssured.requestSpecification = TrelloApi.baseRequestConfiguration();
-
-
-        Objects as = given()
-                .log().everything()
-                .baseUri(TRELLO_NEW_BOARD_API_URL)
-                .contentType(ContentType.JSON)
-                .body("{\"name\": \"someboardname7771\", \"key\": \"cfec53e08b8393f77dd65ba6525039c8\", \"token\": \"2f58ade2a9219cc72027f740317288f8afbf0045a49cbbacfdcf2c9fe3612610\"}")
-                .when()
-                .post()
-                .prettyPeek()
-                .then()
-                .statusCode(200)
-                .extract().as(Objects.class);
-
-        assertThat(as.getName(), equalTo("someboardname7771"));
-        System.out.println(as);
-
-
-
-        Object newBoardId88 = RestAssured
-                .given()
-                .contentType(ContentType.JSON)
-                .log().everything()
-                .when()
-                .body(TrelloApi.with().new_board("BOARD_" + number).callPostApi(TRELLO_NEW_BOARD_API_URL))
-                .then()
-                .statusCode(201)
-    }*/
+        softly.assertThat(cards0.size() + cards1.size() + cards2.size()).isEqualTo(5);
+        softly.assertThat(cards0.get(0).getName()).isEqualTo(NEW_CARD_NAME);
+        softly.assertThat(cards0.get(0).getDesc()).isEqualTo("Farmina Vet Life 5 kg");
+        softly.assertThat(cards1.get(0).getName()).isEqualTo("Complete API Testing mentoring");
+        softly.assertThat(cards1.get(1).getName()).isEqualTo("Complete Mobile Testing mentoring");
+        softly.assertThat(cards2.get(0).getName()).isEqualTo("Successfully pass the assessment");
+        softly.assertThat(cards2.get(0).getDesc()).isEqualTo("Submit documents\nPrepare to technical interview\nDo the best");
     }
 }
