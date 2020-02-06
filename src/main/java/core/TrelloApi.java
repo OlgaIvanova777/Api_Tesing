@@ -40,7 +40,6 @@ public class TrelloApi {
 
     public static class ApiBuilder {
         private TrelloApi trelloApi;
-        String baseUrl;
 
         private ApiBuilder(TrelloApi gcApi) {
             trelloApi = gcApi;
