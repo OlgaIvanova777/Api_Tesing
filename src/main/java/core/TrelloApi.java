@@ -1,28 +1,40 @@
 package core;
 
-import beans.Objects;
+import beans.Boards;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static core.TrelloConstants.*;
+import static io.restassured.http.Method.POST;
 import static org.hamcrest.Matchers.lessThan;
 
 public class TrelloApi {
     //builder pattern
     private TrelloApi() {
     }
-    private HashMap<String, String> params = new HashMap<String, String>();
+
+    private static Map<String, String> params = new HashMap<String, String>() {
+        {
+            put(KEY_PARAM, TRELLO_API_KEY_VALUE);
+            put(TOKEN_PARAM, TRELLO_API_TOKEN_VALUE);
+        }
+    };
+
+    private Method method;
 
     public static ApiBuilder with() {
         TrelloApi api = new TrelloApi();
@@ -30,14 +42,20 @@ public class TrelloApi {
     }
 
     public static class ApiBuilder {
-        TrelloApi trelloApi;
+        private TrelloApi trelloApi;
+        String baseUrl;
 
         private ApiBuilder(TrelloApi gcApi) {
             trelloApi = gcApi;
         }
 
+        public ApiBuilder withUrl(String baseUrl) {
+            this.baseUrl = baseUrl;
+            return this;
+        }
+
         public ApiBuilder id(String id) {
-            trelloApi.params.put(ID, id);
+            trelloApi.params.put(ID_PARAM, id);
             return this;
         }
 
@@ -46,55 +64,113 @@ public class TrelloApi {
             return this;
         }
 
-        public ApiBuilder key(){
-            trelloApi.params.put(KEY_PARAM, TRELLO_API_KEY_VALUE);
-            return this;
-        }
-        public ApiBuilder token() {
-            trelloApi.params.put(TOKEN_PARAM, TRELLO_API_TOKEN_VALUE);
-            return this;
-        }
+//        public ApiBuilder createBoard(ApiBuilder builder)
+//        {
+//
+//            return builder;
+//        }
 
-        public Response callGetApi(String URL) {
+        public Response callApi(String endPoint, Method method) {
             return RestAssured.with()
                     .queryParams(trelloApi.params)
+                    //      .pathParams(trelloApi.pathParams)
+//                    .spec(baseRequestConfiguration().baseUri(endPoint))
                     .log().all()
-                    .get(URL).prettyPeek();
+                    .request(method)
+                    .prettyPeek();
         }
 
-        public Response callPostApi(String URL) {
-            return RestAssured.with()
-                    .queryParams(trelloApi.params)
-                    .contentType(ContentType.JSON)
+        public Response callApi(Method method) {
+            final RequestSpecification specification;
+            switch (method) {
+                case POST:
+                    specification = basePOSTRequestConfiguration();
+                    break;
+                case GET:
+                    specification = baseGETRequestConfiguration();
+                    break;
+                default:
+                    throw new RuntimeException("Method not supported:" + method);
+            }
+
+            return RestAssured
+                    .given()
+                    .spec(specification)
+                    .baseUri(this.baseUrl)
                     .log().all()
-                    .post(URL).prettyPeek();
+                    .when()
+                    .request(method)
+                    .prettyPeek();
         }
     }
 
     //get ready Boards answers list form api response
-    public static List<Objects> getAnswers(Response response){
-        return new Gson().fromJson( response.asString().trim(), new TypeToken<List<Objects>>() {}.getType());
+    public static List<Boards> getAnswers(Response response) {
+        return new Gson().fromJson(response.asString().trim(), new TypeToken<List<Boards>>() {
+        }.getType());
     }
 
-    public static Objects getAnswer(Response response){
-        return new Gson().fromJson( response.asString().trim(), new TypeToken<Objects>() {}.getType());
+    public static Boards getAnswer(Response response) {
+        return new Gson().fromJson(response.asString().trim(), new TypeToken<Boards>() {
+        }.getType());
     }
+
+    public static Boards getBoard(Response response) {
+        return response.getBody().as(Boards.class);
+    }
+
 
     //set base request and response specifications to use in tests
-    public static ResponseSpecification successResponse(){
+    public static ResponseSpecification successResponse() {
         return new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON)
-                .expectHeader("Connection", "keep-alive")
+                .expectHeader(HttpHeaders.CONNECTION, "keep-alive")
                 .expectResponseTime(lessThan(20000L))
                 .expectStatusCode(HttpStatus.SC_OK)
                 .build();
     }
 
-    public static RequestSpecification baseRequestConfiguration(){
+    public static ResponseSpecification badRequest() {
+        return new ResponseSpecBuilder()
+                .expectContentType(ContentType.TEXT)
+                .expectResponseTime(lessThan(20000L))
+                .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
+                .build();
+    }
+
+    public static ResponseSpecification boardNotFound() {
+        return new ResponseSpecBuilder()
+                .expectContentType(ContentType.TEXT)
+                .expectHeader(HttpHeaders.CONNECTION, "close")
+                .expectResponseTime(lessThan(20000L))
+                .expectStatusCode(HttpStatus.SC_NOT_FOUND)
+                .build();
+    }
+
+    public static RequestSpecification baseRequestConfiguration(String endPoint) {
         return new RequestSpecBuilder()
                 .setAccept(ContentType.JSON)
                 .setRelaxedHTTPSValidation()
-                .setBaseUri(TRELLO_ALL_BOARDS_API_URL)
+                .setBaseUri(endPoint).addQueryParam("")
+                .build();
+    }
+
+    private static RequestSpecification basePOSTRequestConfiguration() {
+
+        return new RequestSpecBuilder()
+                .setContentType(ContentType.JSON)
+//                .setBody("{\"name\": \"BOARD_"  + "\", \"key\": \"" + TRELLO_API_KEY_VALUE +
+//                        "\", \"token\": \"" + TRELLO_API_TOKEN_VALUE + "\"}")
+                .setBody(TrelloApi.params)
+                .setRelaxedHTTPSValidation()
+                .build();
+    }
+
+    private static RequestSpecification baseGETRequestConfiguration() {
+        return new RequestSpecBuilder()
+                .addQueryParams(TrelloApi.params)
+                .setAccept(ContentType.JSON)
+                .setRelaxedHTTPSValidation()
                 .build();
     }
 }
