@@ -9,6 +9,83 @@
     "idEnterprise": null,
     "pinned": false,
     "url": "https://trello.com/b/3Y8mZ0wc/olitestboard",
-    "shortUrl": "https://trello.com/b/3Y8mZ0wc"
+    "shortUrl": "https://trello.com/b/3Y8mZ0wc",
+    "prefs": {
+      "permissionLevel": "private",
+      "hideVotes": false,
+      "voting": "disabled",
+      "comments": "members",
+      "invitations": "members",
+      "selfJoin": true,
+      "cardCovers": true,
+      "isTemplate": false,
+      "cardAging": "regular",
+      "calendarFeedEnabled": false,
+      "background": "blue",
+      "backgroundImage": null,
+      "backgroundImageScaled": null,
+      "backgroundTile": false,
+      "backgroundBrightness": "dark",
+      "backgroundColor": "#0079BF",
+      "backgroundBottomColor": "#0079BF",
+      "backgroundTopColor": "#0079BF",
+      "canBePublic": true,
+      "canBeEnterprise": true,
+      "canBeOrg": true,
+      "canBePrivate": true,
+      "canInvite": true
+    },
+    "labelNames": {
+      "green": "",
+      "yellow": "",
+      "orange": "",
+      "red": "",
+      "purple": "",
+      "blue": "",
+      "sky": "",
+      "lime": "",
+      "pink": "",
+      "black": ""
+    },
+    "actions": [
+      {
+        "id": "5e31c05b4a2d90838eecea81",
+        "idMemberCreator": "591c26f96ab496d404b32a28",
+        "data": {
+          "creationMethod": "automatic",
+          "board": {
+            "id": "5e31c05b4a2d90838eecea7c",
+            "name": "OliTestBoard",
+            "shortLink": "3Y8mZ0wc"
+          }
+        },
+        "type": "createBoard",
+        "date": "2020-01-29T17:26:51.844Z",
+        "limits": {},
+        "memberCreator": {
+          "id": "591c26f96ab496d404b32a28",
+          "activityBlocked": false,
+          "avatarHash": "",
+          "avatarUrl": null,
+          "fullName": "Olga Ivanova",
+          "idMemberReferrer": "569e56d53d78c92709726b89",
+          "initials": "OI",
+          "nonPublic": {},
+          "nonPublicAvailable": false,
+          "username": "olga46962082"
+        }
+      }
+    ],
+    "lists": [
+      {
+        "id": "5e31c05b4a2d90838eecea7d",
+        "name": "To Do",
+        "closed": false,
+        "idBoard": "5e31c05b4a2d90838eecea7c",
+        "pos": 16384,
+        "subscribed": false,
+        "softLimit": null
+      }
+    ]
   }
 }

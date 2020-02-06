@@ -10,7 +10,5 @@ public class TrelloConstants {
     public static final String NAME_PARAM = "name";
     public static final String KEY_PARAM = "key";
     public static final String TOKEN_PARAM = "token";
-    public static final String ACTIONS_PARAM = "actions";
-    public static final String FIELDS_PARAM = "fields";
-    public static final String ID_PARAM = "id";
+    public static final int CHAR_LIMIT = 16385;
 }
