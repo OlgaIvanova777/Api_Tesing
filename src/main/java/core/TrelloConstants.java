@@ -12,4 +12,3 @@ public class TrelloConstants {
     public static final String TOKEN_PARAM = "token";
     public static final int CHAR_LIMIT = 16385;
 }
-
