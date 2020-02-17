@@ -24,8 +24,8 @@ import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 public class BoardApi {
     public static final String TRELLO_API_KEY_VALUE = AppProperties.getStringProperty("key");
     public static final String TRELLO_API_TOKEN_VALUE = AppProperties.getStringProperty("token");
-
     public static final String TRELLO_NEW_BOARD_API_URL = AppProperties.getStringProperty("new_board_url");
+
     public static final String TRELLO_ALL_BOARDS_API_URL = AppProperties.getStringProperty("all_boards_url");
 
     //builder pattern
@@ -52,11 +52,14 @@ public class BoardApi {
             trelloApi = gcApi;
         }
 
-        public ApiBuilder url(String baseUrl) {
-            Url = baseUrl;
+        public ApiBuilder url() {
+            Url = TRELLO_NEW_BOARD_API_URL;
             return this;
         }
-
+        public ApiBuilder id(String id) {
+            Url = TRELLO_NEW_BOARD_API_URL + id;
+            return this;
+        }
         public ApiBuilder name(String name) {
             trelloApi.params.put(NAME_PARAM, name);
             return this;
@@ -136,7 +139,7 @@ public class BoardApi {
 
     public static void removeBoard(Boards board) {
         BoardApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+                .id(board.getId())
                 .callApi(Method.DELETE)
                 .then()
                 .spec(BoardApi.successResponse());

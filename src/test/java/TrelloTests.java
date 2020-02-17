@@ -1,11 +1,8 @@
 import beans.Boards;
-import core.AppProperties;
 import core.BoardApi;
 import io.restassured.http.Method;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
-
-import java.util.Random;
 
 import static core.TrelloConstants.CHAR_LIMIT;
 import static org.hamcrest.CoreMatchers.is;
@@ -13,20 +10,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class TrelloTests {
-    public static final String TRELLO_NEW_BOARD_API_URL = AppProperties.getStringProperty("new_board_url");
-
     private final String NAME = RandomStringUtils.random(10, true, true);
 
     @Test
     public void createAndDeleteNewBoard() {
 
         Boards board = BoardApi.getBoard(BoardApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL)
+                .url()
                 .name(NAME)
                 .callApi(Method.POST));
 
         BoardApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+                .id(board.getId())
                 .callApi(Method.GET)
                 .then()
                 .spec(BoardApi.successResponse());
@@ -34,7 +29,7 @@ public class TrelloTests {
         BoardApi.removeBoard(board);
 
         BoardApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+                .id(board.getId())
                 .callApi(Method.GET)
                 .then()
                 .spec(BoardApi.boardNotFound());
@@ -45,19 +40,19 @@ public class TrelloTests {
         String new_name = "New name for the board";
 
         Boards board = BoardApi.getBoard(BoardApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL)
+                .url()
                 .name(NAME)
                 .callApi(Method.POST));
 
         BoardApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+                .id(board.getId())
                 .name(new_name)
                 .callApi(Method.PUT)
                 .then()
                 .spec(BoardApi.successResponse());
 
         String name = BoardApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+                .id(board.getId())
                 .callApi(Method.GET)
                 .then()
                 .extract().as(Boards.class).getName();
@@ -72,7 +67,7 @@ public class TrelloTests {
         String incorrect_name = RandomStringUtils.random(CHAR_LIMIT, true, true);
 
         BoardApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL)
+                .url()
                 .name(incorrect_name)
                 .callApi(Method.POST)
                 .then()
@@ -84,9 +79,9 @@ public class TrelloTests {
         SoftAssertions softly = new SoftAssertions();
 
         Boards board = BoardApi.getBoard(BoardApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL +
+                .id(
                         BoardApi.getBoard(BoardApi.with()
-                                .url(TRELLO_NEW_BOARD_API_URL)
+                                .url()
                                 .name(NAME)
                                 .callApi(Method.POST))
                                 .getId()
