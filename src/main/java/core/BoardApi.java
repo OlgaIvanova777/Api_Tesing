@@ -2,6 +2,7 @@ package core;
 
 import beans.Boards;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -82,10 +83,9 @@ public class BoardApi {
         }
     }
 
-    public static <T> T getAnswer (Response response, Class<T> classMarker) {
-        return new Gson().fromJson(response.asString().trim(), classMarker);
+    public static Boards getBoard(Response response){
+        return new Gson().fromJson( response.asString().trim(), new TypeToken<Boards>() {}.getType());
     }
-
     //set base request and response specifications to use in tests
 
     private static RequestSpecification basePOSTRequestConfiguration() {

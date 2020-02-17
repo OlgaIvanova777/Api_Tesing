@@ -20,10 +20,10 @@ public class TrelloTests {
     @Test
     public void createAndDeleteNewBoard() {
 
-        Boards board = BoardApi.getAnswer(BoardApi.with()
+        Boards board = BoardApi.getBoard(BoardApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL)
                 .name(NAME)
-                .callApi(Method.POST), Boards.class);
+                .callApi(Method.POST));
 
         BoardApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL + board.getId())
@@ -44,10 +44,10 @@ public class TrelloTests {
     public void renameBoard() {
         String new_name = "New name for the board";
 
-        Boards board = BoardApi.getAnswer(BoardApi.with()
+        Boards board = BoardApi.getBoard(BoardApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL)
                 .name(NAME)
-                .callApi(Method.POST), Boards.class);
+                .callApi(Method.POST));
 
         BoardApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL + board.getId())
@@ -83,15 +83,15 @@ public class TrelloTests {
     public void checkBoardInfo() {
         SoftAssertions softly = new SoftAssertions();
 
-        Boards board = BoardApi.getAnswer(BoardApi.with()
+        Boards board = BoardApi.getBoard(BoardApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL +
-                        BoardApi.getAnswer(BoardApi.with()
+                        BoardApi.getBoard(BoardApi.with()
                                 .url(TRELLO_NEW_BOARD_API_URL)
                                 .name(NAME)
-                                .callApi(Method.POST), Boards.class)
+                                .callApi(Method.POST))
                                 .getId()
                 )
-                .callApi(Method.GET), Boards.class);
+                .callApi(Method.GET));
 
         BoardApi.removeBoard(board);
 

@@ -6,9 +6,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class AppProperties {
-
-
-
     public static final String FILE_PATH = "src/main/resources/app.properties";
     private static Properties properties = null;
 
@@ -28,6 +25,4 @@ public class AppProperties {
         initProperties();
         return properties.getProperty(propertyName);
     }
-
-
 }
