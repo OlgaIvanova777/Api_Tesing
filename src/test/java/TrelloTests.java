@@ -55,9 +55,9 @@ public class TrelloTests {
                 .then()
                 .extract().as(Boards.class).getName();
 
-        BoardApi.removeBoard(board);
-
         assertThat(name, is(new_name));
+
+        BoardApi.removeBoard(board);
     }
 
     @Test
@@ -84,11 +84,11 @@ public class TrelloTests {
                 )
                 .callApi(Method.GET));
 
-        BoardApi.removeBoard(board);
-
         softly.assertThat(board.getName()).isEqualTo(NAME);
         softly.assertThat(board.getUrl()).contains(NAME);
         softly.assertThat(board.getPrefs().getPermissionLevel()).isEqualTo("private");
         softly.assertThat(board.getLabelNames().getGreen()).isEmpty();
+
+        BoardApi.removeBoard(board);
     }
 }
