@@ -16,7 +16,6 @@ public class TrelloTests {
     public void createAndDeleteNewBoard() {
 
         Boards board = BoardApi.getBoard(BoardApi.with()
-                .url()
                 .name(NAME)
                 .callApi(Method.POST));
 
@@ -40,7 +39,6 @@ public class TrelloTests {
         String new_name = "New name for the board";
 
         Boards board = BoardApi.getBoard(BoardApi.with()
-                .url()
                 .name(NAME)
                 .callApi(Method.POST));
 
@@ -67,7 +65,6 @@ public class TrelloTests {
         String incorrect_name = RandomStringUtils.random(CHAR_LIMIT, true, true);
 
         BoardApi.with()
-                .url()
                 .name(incorrect_name)
                 .callApi(Method.POST)
                 .then()
@@ -81,7 +78,6 @@ public class TrelloTests {
         Boards board = BoardApi.getBoard(BoardApi.with()
                 .id(
                         BoardApi.getBoard(BoardApi.with()
-                                .url()
                                 .name(NAME)
                                 .callApi(Method.POST))
                                 .getId()

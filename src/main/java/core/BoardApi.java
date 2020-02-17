@@ -42,6 +42,7 @@ public class BoardApi {
 
     public static ApiBuilder with() {
         BoardApi api = new BoardApi();
+        Url = TRELLO_NEW_BOARD_API_URL;
         return new ApiBuilder(api);
     }
 
@@ -52,12 +53,8 @@ public class BoardApi {
             trelloApi = gcApi;
         }
 
-        public ApiBuilder url() {
-            Url = TRELLO_NEW_BOARD_API_URL;
-            return this;
-        }
         public ApiBuilder id(String id) {
-            Url = TRELLO_NEW_BOARD_API_URL + id;
+            Url += id;
             return this;
         }
         public ApiBuilder name(String name) {
