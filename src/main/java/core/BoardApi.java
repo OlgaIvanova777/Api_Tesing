@@ -21,6 +21,11 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 
 public class BoardApi {
+    public static final String TRELLO_API_KEY_VALUE = AppProperties.getStringProperty("key");
+    public static final String TRELLO_API_TOKEN_VALUE = AppProperties.getStringProperty("token");
+
+    public static final String TRELLO_NEW_BOARD_API_URL = AppProperties.getStringProperty("new_board_url");
+    public static final String TRELLO_ALL_BOARDS_API_URL = AppProperties.getStringProperty("all_boards_url");
 
     //builder pattern
     private BoardApi() {

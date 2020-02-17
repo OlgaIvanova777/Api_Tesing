@@ -1,4 +1,5 @@
 import beans.Boards;
+import core.AppProperties;
 import core.BoardApi;
 import io.restassured.http.Method;
 import org.assertj.core.api.SoftAssertions;
@@ -7,12 +8,12 @@ import org.junit.Test;
 import java.util.Random;
 
 import static core.TrelloConstants.CHAR_LIMIT;
-import static core.TrelloConstants.TRELLO_NEW_BOARD_API_URL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class TrelloTests {
+    public static final String TRELLO_NEW_BOARD_API_URL = AppProperties.getStringProperty("new_board_url");
 
     private final String NAME = generateRandomName(10);
 
