@@ -1,5 +1,5 @@
 import beans.Boards;
-import core.TrelloApi;
+import core.BoardsApi;
 import io.restassured.http.Method;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
@@ -19,49 +19,49 @@ public class TrelloTests {
     @Test
     public void createAndDeleteNewBoard() {
 
-        Boards board = TrelloApi.getAnswer(TrelloApi.with()
+        Boards board = BoardsApi.getAnswer(BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL)
                 .name(NAME)
                 .callApi(Method.POST), Boards.class);
 
-        TrelloApi.with()
+        BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL + board.getId())
                 .callApi(Method.GET)
                 .then()
-                .spec(TrelloApi.successResponse());
+                .spec(BoardsApi.successResponse());
 
-        TrelloApi.removeBoard(board);
+        BoardsApi.removeBoard(board);
 
-        TrelloApi.with()
+        BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL + board.getId())
                 .callApi(Method.GET)
                 .then()
-                .spec(TrelloApi.boardNotFound());
+                .spec(BoardsApi.boardNotFound());
     }
 
     @Test
     public void renameBoard() {
         String new_name = "New name for the board";
 
-        Boards board = TrelloApi.getAnswer(TrelloApi.with()
+        Boards board = BoardsApi.getAnswer(BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL)
                 .name(NAME)
                 .callApi(Method.POST), Boards.class);
 
-        TrelloApi.with()
+        BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL + board.getId())
                 .name(new_name)
                 .callApi(Method.PUT)
                 .then()
-                .spec(TrelloApi.successResponse());
+                .spec(BoardsApi.successResponse());
 
-        String name = TrelloApi.with()
+        String name = BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL + board.getId())
                 .callApi(Method.GET)
                 .then()
                 .extract().as(Boards.class).getName();
 
-        TrelloApi.removeBoard(board);
+        BoardsApi.removeBoard(board);
 
         assertThat(name, is(new_name));
     }
@@ -70,21 +70,21 @@ public class TrelloTests {
     public void incorrectBoardName(){
         String incorrect_name = generateRandomName(CHAR_LIMIT);
 
-        TrelloApi.with()
+        BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL)
                 .name(incorrect_name)
                 .callApi(Method.POST)
                 .then()
-                .spec(TrelloApi.badRequest());
+                .spec(BoardsApi.badRequest());
     }
 
     @Test
     public void checkBoardInfo() {
         SoftAssertions softly = new SoftAssertions();
 
-        Boards board = TrelloApi.getAnswer(TrelloApi.with()
+        Boards board = BoardsApi.getAnswer(BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL +
-                        TrelloApi.getAnswer(TrelloApi.with()
+                        BoardsApi.getAnswer(BoardsApi.with()
                                 .url(TRELLO_NEW_BOARD_API_URL)
                                 .name(NAME)
                                 .callApi(Method.POST), Boards.class)
@@ -92,7 +92,7 @@ public class TrelloTests {
                 )
                 .callApi(Method.GET), Boards.class);
 
-        TrelloApi.removeBoard(board);
+        BoardsApi.removeBoard(board);
 
         softly.assertThat(board.getName()).isEqualTo(NAME);
         softly.assertThat(board.getUrl()).contains(NAME);
