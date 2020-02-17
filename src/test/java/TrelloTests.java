@@ -1,114 +1,94 @@
 import beans.Boards;
-import core.TrelloApi;
+import core.BoardApi;
 import io.restassured.http.Method;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 
-import java.util.Random;
-
 import static core.TrelloConstants.CHAR_LIMIT;
-import static core.TrelloConstants.TRELLO_NEW_BOARD_API_URL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class TrelloTests {
-
-    private final String NAME = generateRandomName(10);
+    private final String NAME = RandomStringUtils.random(10, true, true);
 
     @Test
     public void createAndDeleteNewBoard() {
 
-        Boards board = TrelloApi.getAnswer(TrelloApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL)
+        Boards board = BoardApi.getBoard(BoardApi.with()
                 .name(NAME)
-                .callApi(Method.POST), Boards.class);
+                .callApi(Method.POST));
 
-        TrelloApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+        BoardApi.with()
+                .id(board.getId())
                 .callApi(Method.GET)
                 .then()
-                .spec(TrelloApi.successResponse());
+                .spec(BoardApi.successResponse());
 
-        TrelloApi.removeBoard(board);
+        BoardApi.removeBoard(board);
 
-        TrelloApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+        BoardApi.with()
+                .id(board.getId())
                 .callApi(Method.GET)
                 .then()
-                .spec(TrelloApi.boardNotFound());
+                .spec(BoardApi.boardNotFound());
     }
 
     @Test
     public void renameBoard() {
         String new_name = "New name for the board";
 
-        Boards board = TrelloApi.getAnswer(TrelloApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL)
+        Boards board = BoardApi.getBoard(BoardApi.with()
                 .name(NAME)
-                .callApi(Method.POST), Boards.class);
+                .callApi(Method.POST));
 
-        TrelloApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+        BoardApi.with()
+                .id(board.getId())
                 .name(new_name)
                 .callApi(Method.PUT)
                 .then()
-                .spec(TrelloApi.successResponse());
+                .spec(BoardApi.successResponse());
 
-        String name = TrelloApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+        String name = BoardApi.with()
+                .id(board.getId())
                 .callApi(Method.GET)
                 .then()
                 .extract().as(Boards.class).getName();
 
-        TrelloApi.removeBoard(board);
+        BoardApi.removeBoard(board);
 
         assertThat(name, is(new_name));
     }
 
     @Test
     public void incorrectBoardName(){
-        String incorrect_name = generateRandomName(CHAR_LIMIT);
+        String incorrect_name = RandomStringUtils.random(CHAR_LIMIT, true, true);
 
-        TrelloApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL)
+        BoardApi.with()
                 .name(incorrect_name)
                 .callApi(Method.POST)
                 .then()
-                .spec(TrelloApi.badRequest());
+                .spec(BoardApi.badRequest("invalid value for name"));
     }
 
     @Test
     public void checkBoardInfo() {
         SoftAssertions softly = new SoftAssertions();
 
-        Boards board = TrelloApi.getAnswer(TrelloApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL +
-                        TrelloApi.getAnswer(TrelloApi.with()
-                                .url(TRELLO_NEW_BOARD_API_URL)
+        Boards board = BoardApi.getBoard(BoardApi.with()
+                .id(
+                        BoardApi.getBoard(BoardApi.with()
                                 .name(NAME)
-                                .callApi(Method.POST), Boards.class)
+                                .callApi(Method.POST))
                                 .getId()
                 )
-                .callApi(Method.GET), Boards.class);
+                .callApi(Method.GET));
 
-        TrelloApi.removeBoard(board);
+        BoardApi.removeBoard(board);
 
         softly.assertThat(board.getName()).isEqualTo(NAME);
         softly.assertThat(board.getUrl()).contains(NAME);
         softly.assertThat(board.getPrefs().getPermissionLevel()).isEqualTo("private");
         softly.assertThat(board.getLabelNames().getGreen()).isEmpty();
-    }
-
-
-    private String generateRandomName (int targetStringLength){
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        Random random = new Random();
-
-        return random.ints(leftLimit, rightLimit + 1)
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
     }
 }

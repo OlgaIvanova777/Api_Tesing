@@ -2,6 +2,7 @@ package core;
 
 import beans.Boards;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -18,11 +19,17 @@ import java.util.Map;
 
 import static core.TrelloConstants.*;
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 
-public class TrelloApi {
+public class BoardApi {
+    public static final String TRELLO_API_KEY_VALUE = AppProperties.getStringProperty("key");
+    public static final String TRELLO_API_TOKEN_VALUE = AppProperties.getStringProperty("token");
+    public static final String TRELLO_NEW_BOARD_API_URL = AppProperties.getStringProperty("new_board_url");
+
+    public static final String TRELLO_ALL_BOARDS_API_URL = AppProperties.getStringProperty("all_boards_url");
 
     //builder pattern
-    private TrelloApi() {
+    private BoardApi() {
     }
 
     private static Map<String, String> params = new HashMap<String, String>() {
@@ -34,22 +41,22 @@ public class TrelloApi {
     private static String Url = null;
 
     public static ApiBuilder with() {
-        TrelloApi api = new TrelloApi();
+        BoardApi api = new BoardApi();
+        Url = TRELLO_NEW_BOARD_API_URL;
         return new ApiBuilder(api);
     }
 
     public static class ApiBuilder {
-        private TrelloApi trelloApi;
+        private BoardApi trelloApi;
 
-        private ApiBuilder(TrelloApi gcApi) {
+        private ApiBuilder(BoardApi gcApi) {
             trelloApi = gcApi;
         }
 
-        public ApiBuilder url(String baseUrl) {
-            Url = baseUrl;
+        public ApiBuilder id(String id) {
+            Url += id;
             return this;
         }
-
         public ApiBuilder name(String name) {
             trelloApi.params.put(NAME_PARAM, name);
             return this;
@@ -76,17 +83,16 @@ public class TrelloApi {
         }
     }
 
-    public static <T> T getAnswer (Response response, Class<T> classMarker) {
-        return new Gson().fromJson(response.asString().trim(), classMarker);
+    public static Boards getBoard(Response response){
+        return new Gson().fromJson( response.asString().trim(), new TypeToken<Boards>() {}.getType());
     }
-
     //set base request and response specifications to use in tests
 
     private static RequestSpecification basePOSTRequestConfiguration() {
 
         return new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
-                .setBody(TrelloApi.params)
+                .setBody(BoardApi.params)
                 .setRelaxedHTTPSValidation()
                 .setBaseUri(Url)
                 .build();
@@ -94,7 +100,7 @@ public class TrelloApi {
 
     private static RequestSpecification baseGETRequestConfiguration() {
         return new RequestSpecBuilder()
-                .addQueryParams(TrelloApi.params)
+                .addQueryParams(BoardApi.params)
                 .setAccept(ContentType.JSON)
                 .setRelaxedHTTPSValidation()
                 .build();
@@ -108,12 +114,14 @@ public class TrelloApi {
                 .build();
     }
 
-    public static ResponseSpecification badRequest() {
+    public static ResponseSpecification badRequest(String error) {
         return new ResponseSpecBuilder()
                 .expectContentType(ContentType.TEXT)
                 .expectHeader(HttpHeaders.CONNECTION, "close")
                 .expectResponseTime(lessThan(20000L))
                 .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
+                .expectStatusLine("HTTP/1.1 400 Bad Request")
+                .expectBody(comparesEqualTo(error))
                 .build();
     }
 
@@ -127,10 +135,10 @@ public class TrelloApi {
     }
 
     public static void removeBoard(Boards board) {
-        TrelloApi.with()
-                .url(TRELLO_NEW_BOARD_API_URL + board.getId())
+        BoardApi.with()
+                .id(board.getId())
                 .callApi(Method.DELETE)
                 .then()
-                .spec(TrelloApi.successResponse());
+                .spec(BoardApi.successResponse());
     }
 }
