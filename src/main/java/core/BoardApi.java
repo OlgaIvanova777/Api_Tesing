@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static core.TrelloConstants.*;
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 
 public class BoardApi {
 
@@ -108,12 +109,14 @@ public class BoardApi {
                 .build();
     }
 
-    public static ResponseSpecification badRequest() {
+    public static ResponseSpecification badRequest(String error) {
         return new ResponseSpecBuilder()
                 .expectContentType(ContentType.TEXT)
                 .expectHeader(HttpHeaders.CONNECTION, "close")
                 .expectResponseTime(lessThan(20000L))
                 .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
+                .expectStatusLine("HTTP/1.1 400 Bad Request")
+                .expectBody(comparesEqualTo(error))
                 .build();
     }
 

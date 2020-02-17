@@ -75,7 +75,7 @@ public class TrelloTests {
                 .name(incorrect_name)
                 .callApi(Method.POST)
                 .then()
-                .spec(BoardApi.badRequest());
+                .spec(BoardApi.badRequest("invalid value for name"));
     }
 
     @Test
