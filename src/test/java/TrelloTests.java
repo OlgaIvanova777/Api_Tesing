@@ -10,12 +10,12 @@ import java.util.Random;
 import static core.TrelloConstants.CHAR_LIMIT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class TrelloTests {
     public static final String TRELLO_NEW_BOARD_API_URL = AppProperties.getStringProperty("new_board_url");
 
-    private final String NAME = generateRandomName(10);
+    private final String NAME = RandomStringUtils.random(10, true, true);
 
     @Test
     public void createAndDeleteNewBoard() {
@@ -69,7 +69,7 @@ public class TrelloTests {
 
     @Test
     public void incorrectBoardName(){
-        String incorrect_name = generateRandomName(CHAR_LIMIT);
+        String incorrect_name = RandomStringUtils.random(CHAR_LIMIT, true, true);
 
         BoardApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL)
@@ -99,17 +99,5 @@ public class TrelloTests {
         softly.assertThat(board.getUrl()).contains(NAME);
         softly.assertThat(board.getPrefs().getPermissionLevel()).isEqualTo("private");
         softly.assertThat(board.getLabelNames().getGreen()).isEmpty();
-    }
-
-
-    private String generateRandomName (int targetStringLength){
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        Random random = new Random();
-
-        return random.ints(leftLimit, rightLimit + 1)
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
     }
 }
