@@ -19,10 +19,10 @@ import java.util.Map;
 import static core.TrelloConstants.*;
 import static org.hamcrest.Matchers.lessThan;
 
-public class TrelloApi {
+public class BoardApi {
 
     //builder pattern
-    private TrelloApi() {
+    private BoardApi() {
     }
 
     private static Map<String, String> params = new HashMap<String, String>() {
@@ -34,14 +34,14 @@ public class TrelloApi {
     private static String Url = null;
 
     public static ApiBuilder with() {
-        TrelloApi api = new TrelloApi();
+        BoardApi api = new BoardApi();
         return new ApiBuilder(api);
     }
 
     public static class ApiBuilder {
-        private TrelloApi trelloApi;
+        private BoardApi trelloApi;
 
-        private ApiBuilder(TrelloApi gcApi) {
+        private ApiBuilder(BoardApi gcApi) {
             trelloApi = gcApi;
         }
 
@@ -86,7 +86,7 @@ public class TrelloApi {
 
         return new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
-                .setBody(TrelloApi.params)
+                .setBody(BoardApi.params)
                 .setRelaxedHTTPSValidation()
                 .setBaseUri(Url)
                 .build();
@@ -94,7 +94,7 @@ public class TrelloApi {
 
     private static RequestSpecification baseGETRequestConfiguration() {
         return new RequestSpecBuilder()
-                .addQueryParams(TrelloApi.params)
+                .addQueryParams(BoardApi.params)
                 .setAccept(ContentType.JSON)
                 .setRelaxedHTTPSValidation()
                 .build();
@@ -127,10 +127,10 @@ public class TrelloApi {
     }
 
     public static void removeBoard(Boards board) {
-        TrelloApi.with()
+        BoardApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL + board.getId())
                 .callApi(Method.DELETE)
                 .then()
-                .spec(TrelloApi.successResponse());
+                .spec(BoardApi.successResponse());
     }
 }
