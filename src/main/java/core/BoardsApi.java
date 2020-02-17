@@ -76,8 +76,8 @@ public class BoardsApi {
         }
     }
 
-    public static <T> T getAnswer (Response response, Class<T> classMarker) {
-        return new Gson().fromJson(response.asString().trim(), classMarker);
+    public static Boards getAnswer (Response response) {
+        return new Gson().fromJson(response.asString().trim(), Boards.class);
     }
 
     //set base request and response specifications to use in tests

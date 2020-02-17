@@ -22,7 +22,7 @@ public class TrelloTests {
         Boards board = BoardsApi.getAnswer(BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL)
                 .name(NAME)
-                .callApi(Method.POST), Boards.class);
+                .callApi(Method.POST));
 
         BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL + board.getId())
@@ -46,7 +46,7 @@ public class TrelloTests {
         Boards board = BoardsApi.getAnswer(BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL)
                 .name(NAME)
-                .callApi(Method.POST), Boards.class);
+                .callApi(Method.POST));
 
         BoardsApi.with()
                 .url(TRELLO_NEW_BOARD_API_URL + board.getId())
@@ -87,10 +87,10 @@ public class TrelloTests {
                         BoardsApi.getAnswer(BoardsApi.with()
                                 .url(TRELLO_NEW_BOARD_API_URL)
                                 .name(NAME)
-                                .callApi(Method.POST), Boards.class)
+                                .callApi(Method.POST))
                                 .getId()
                 )
-                .callApi(Method.GET), Boards.class);
+                .callApi(Method.GET));
 
         BoardsApi.removeBoard(board);
 
